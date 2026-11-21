@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1F3864">
+<title>大学生短视频使用与专注力 · 在线问卷</title>
+<style>
+  :root{
+    --ink:#1F3864; --ink2:#2F5D8A; --line:#D9E0EA; --muted:#6B7280;
+    --bg:#F6F7F9; --card:#FFFFFF; --ok:#1D7A46; --warn:#9A5B00;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg); color:#1B1F27;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei","PingFang SC",sans-serif;
+    -webkit-font-smoothing:antialiased; line-height:1.65;
+    padding:24px 16px 48px;
+  }
+  .wrap{max-width:660px;margin:0 auto}
+  header.top{margin-bottom:16px}
+  .brand{font-size:21px;font-weight:700;color:var(--ink);letter-spacing:.2px}
+  .sub{font-size:13px;color:var(--muted);margin-top:2px}
+  .progress{display:flex;gap:6px;margin:14px 0 18px}
+  .progress i{height:4px;flex:1;border-radius:2px;background:var(--line);transition:background .25s}
+  .progress i.on{background:var(--ink2)}
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:22px 20px;box-shadow:0 1px 2px rgba(31,56,100,.04);
+  }
+  .screen{display:none}
+  .screen.on{display:block}
+  h2{font-size:17px;margin:0 0 10px;color:var(--ink);font-weight:700}
+  p{margin:0 0 12px;font-size:14.5px}
+  .note{font-size:13px;color:var(--muted);background:#F2F5FA;border-left:3px solid var(--ink2);
+    padding:10px 12px;border-radius:0 8px 8px 0;margin:14px 0}
+  ul{font-size:14.5px;margin:0 0 12px;padding-left:20px}
+  li{margin:4px 0}
+  label.q{display:block}
+  .qtitle{font-size:14.5px;margin-bottom:10px;color:#1B1F27}
+  .qidx{color:var(--ink2);font-weight:700;margin-right:4px}
+  .grid5{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:8px}
+  .cell{
+    display:flex;flex-direction:column;align-items:center;gap:5px;border:1px solid var(--line);
+    border-radius:9px;padding:8px 3px;cursor:pointer;background:#fff;transition:.15s;
+  }
+  .cell:hover{border-color:#AFC2D9;background:#FAFCFF}
+  .cell input{accent-color:var(--ink2);width:14px;height:14px;margin:0}
+  .cell span{font-size:10.5px;line-height:1.2;text-align:center;color:#39424F}
+  .cell.sel{border-color:var(--ink2);background:#EEF3FA;box-shadow:inset 0 0 0 1px var(--ink2)}
+  .cell.sel span{color:var(--ink2);font-weight:600}
+  .rowq{margin-bottom:18px}
+  .field{margin-bottom:14px}
+  .field>span{display:block;font-size:14px;margin-bottom:8px;font-weight:600;color:#27303D}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{
+    border:1px solid var(--line);border-radius:999px;padding:7px 14px;font-size:13.5px;
+    cursor:pointer;background:#fff;user-select:none;transition:.15s;
+  }
+  .chip.on{border-color:var(--ink2);background:var(--ink2);color:#fff}
+  .foot{display:flex;gap:10px;margin-top:20px;align-items:center}
+  .btn{
+    appearance:none;border:0;border-radius:10px;padding:12px 20px;font-size:15px;font-weight:600;
+    background:var(--ink);color:#fff;cursor:pointer;transition:.15s;
+  }
+  .btn:hover{background:#16304F}
+  .btn.ghost{background:transparent;color:var(--ink2);border:1px solid var(--line)}
+  .btn.ghost:hover{background:#EEF3FA}
+  .btn:disabled{opacity:.45;cursor:not-allowed}
+  .spacer{flex:1}
+  .bad{color:#B42318;font-size:13px;margin-top:8px;display:none}
+  .bad.on{display:block}
+  .score{display:flex;gap:14px;flex-wrap:wrap;margin:6px 0 16px}
+  .box{flex:1 1 220px;border:1px solid var(--line);border-radius:12px;padding:14px}
+  .box .k{font-size:12.5px;color:var(--muted)}
+  .box .v{font-size:26px;font-weight:700;color:var(--ink);line-height:1.2;margin:2px 0 6px}
+  .box .v small{font-size:13px;font-weight:500;color:var(--muted)}
+  .bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+  .bar i{display:block;height:100%;background:var(--ink2);width:0;transition:width .6s}
+  .tag{display:inline-block;font-size:12px;padding:2px 8px;border-radius:6px;background:#EEF3FA;color:var(--ink2);margin-left:6px}
+  footer{margin-top:22px;font-size:12px;color:var(--muted);text-align:center;line-height:1.8}
+  footer a{color:var(--ink2);text-decoration:none;border-bottom:1px dotted #AFC2D9}
+  .admin{display:none;margin-top:14px;font-size:13px;color:var(--muted);text-align:center}
+  .admin.on{display:block}
+  .kbd{font-family:ui-monospace,Consolas,monospace;background:#F0F2F5;border-radius:4px;padding:1px 5px;font-size:12px}
+  @media (max-width:420px){
+    body{padding:16px 12px 40px}
+    .card{padding:18px 15px}
+    .btn{padding:11px 16px;font-size:14.5px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">大学生短视频使用与专注力</div>
+    <div class="sub">在线问卷 · 应用心理学课程研究 · 约 2 分钟</div>
+    <div class="progress" id="bar"><i class="on"></i><i></i><i></i><i></i><i></i></div>
+  </header>
+
+  <!-- 0 知情同意 -->
+  <section class="screen on card" id="s0">
+    <h2>研究说明与知情同意</h2>
+    <p>本问卷用于应用心理学课程的调查研究，目的是了解大学生的短视频使用习惯与专注力自评之间的关系。</p>
+    <ul>
+      <li>全程匿名，不收集姓名、手机号、学号等身份信息。</li>
+      <li>共 12 道量表题 + 3 道基本信息，约 2 分钟。</li>
+      <li>可随时关闭页面退出，不会记录未提交的内容。</li>
+      <li>结果仅用于课程分析与报告，不做任何个体评价。</li>
+    </ul>
+    <div class="note">本问卷为课程自编量表，<b>不是</b>标准化心理测验，结果不构成任何诊断或建议。</div>
+    <div class="foot">
+      <span class="spacer"></span>
+      <button class="btn" id="btnStart">我已了解，开始填写</button>
+    </div>
+  </section>
+
+  <!-- 1 基本信息 -->
+  <section class="screen card" id="s1">
+    <h2>基本信息</h2>
+    <div class="field" data-f="gender">
+      <span>1. 性别</span>
+      <div class="chips">
+        <div class="chip" data-v="男">男</div>
+        <div class="chip" data-v="女">女</div>
+        <div class="chip" data-v="不便透露">不便透露</div>
+      </div>
+    </div>
+    <div class="field" data-f="grade">
+      <span>2. 年级</span>
+      <div class="chips">
+        <div class="chip" data-v="大一">大一</div>
+        <div class="chip" data-v="大二">大二</div>
+        <div class="chip" data-v="大三">大三</div>
+        <div class="chip" data-v="大四">大四</div>
+        <div class="chip" data-v="研究生">研究生</div>
+      </div>
+    </div>
+    <div class="field" data-f="hours">
+      <span>3. 你平均每天刷短视频的时长</span>
+      <div class="chips">
+        <div class="chip" data-v="不到 1 小时">不到 1 小时</div>
+        <div class="chip" data-v="1–2 小时">1–2 小时</div>
+        <div class="chip" data-v="2–4 小时">2–4 小时</div>
+        <div class="chip" data-v="4–6 小时">4–6 小时</div>
+        <div class="chip" data-v="6 小时以上">6 小时以上</div>
+      </div>
+    </div>
+    <div class="foot">
+      <button class="btn ghost" id="back1">上一步</button>
+      <span class="spacer"></span>
+      <button class="btn" id="next1">下一步</button>
+    </div>
+    <div class="bad" id="err1">请把三道题都选上。</div>
+  </section>
+
+  <!-- 2 A 组 -->
+  <section class="screen card" id="s2">
+    <h2>第一部分 · 使用习惯</h2>
+    <p style="font-size:13.5px;color:#6B7280">请根据最近两周的实际情况选择，没有对错。</p>
+    <div id="qsA"></div>
+    <div class="foot">
+      <button class="btn ghost" id="back2">上一步</button>
+      <span class="spacer"></span>
+      <button class="btn" id="next2">下一步</button>
+    </div>
+    <div class="bad" id="err2">还有题目没有作答。</div>
+  </section>
+
+  <!-- 3 B 组 -->
+  <section class="screen card" id="s3">
+    <h2>第二部分 · 专注力自评</h2>
+    <p style="font-size:13.5px;color:#6B7280">请根据最近两周的实际情况选择，没有对错。</p>
+    <div id="qsB"></div>
+    <div class="foot">
+      <button class="btn ghost" id="back3">上一步</button>
+      <span class="spacer"></span>
+      <button class="btn" id="submit">提交问卷</button>
+    </div>
+    <div class="bad" id="err3">还有题目没有作答。</div>
+  </section>
+
+  <!-- 4 结果 -->
+  <section class="screen card" id="s4">
+    <h2>提交成功，谢谢你的参与</h2>
+    <p id="resLine" style="font-size:14px;color:#6B7280"></p>
+    <div class="score">
+      <div class="box">
+        <div class="k">短视频使用强度</div>
+        <div class="v" id="scoreA">–<small> / 30</small></div>
+        <div class="bar"><i id="barA"></i></div>
+        <div class="k" id="lvlA" style="margin-top:8px"></div>
+      </div>
+      <div class="box">
+        <div class="k">专注力自评</div>
+        <div class="v" id="scoreB">–<small> / 30</small></div>
+        <div class="bar"><i id="barB"></i></div>
+        <div class="k" id="lvlB" style="margin-top:8px"></div>
+      </div>
+    </div>
+    <div class="note" id="interp">–</div>
+    <div class="foot">
+      <button class="btn ghost" id="again">再填一份</button>
+      <span class="spacer"></span>
+      <button class="btn" id="share">复制本页链接</button>
+    </div>
+    <div class="admin" id="adminBox">
+      <span class="kbd">研究者入口</span> 已收集 <b id="cnt">0</b> 份<span id="srvTools"> ·
+      <a href="/api/export.csv">导出 CSV</a> ·
+      <a href="/api/stats" target="_blank">查看统计</a></span><span id="localTools" style="display:none"> ·
+      <a href="#" id="dlLocal">导出本机数据</a></span>
+    </div>
+  </section>
+
+  <footer>
+    课程研究 · 匿名填写 · 数据仅用于课堂报告<br>
+    研究者：刘浩（陕西理工大学 应用心理学）· <span id="ver">v1.0</span>
+  </footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var LIKERT = ["很不符合","不太符合","不确定","比较符合","完全符合"];
+
+  var A_ITEMS = [
+    "我每天会不自觉地打开短视频 App",
+    "我常在睡前刷短视频",
+    "我刷短视频的实际时间比原计划长",
+    "学习或做其他事时，我会想着去看短视频",
+    "我会因为刷短视频推迟原本要做的事",
+    "我一天之内会多次打开短视频 App"
+  ];
+  var B_ITEMS = [
+    "我能连续专注 30 分钟不分心",
+    "阅读较长的文章时，我能读到最后",
+    "做一件事时，我不太会频繁切换 App",
+    "我能按计划完成当天的任务",
+    "需要动脑的任务，我能坚持做完",
+    "我很少因为手机打断正在进行的工作"
+  ];
+  var CHECK_AT = 2;                 // 在第二部分第 3 题后插入注意力检测题
+  var CHECK_TEXT = "本题用于检测作答质量，请直接选择「比较符合」";
+
+  var state = {
+    step: 0,
+    gender: "", grade: "", hours: "",
+    ansA: [0,0,0,0,0,0],
+    ansB: [0,0,0,0,0,0],
+    check: 0,
+    t0: 0,
+    sent: false
+  };
+
+  var $ = function(id){ return document.getElementById(id); };
+  var bar = $("bar").children;
+
+  function show(step){
+    state.step = step;
+    ["s0","s1","s2","s3","s4"].forEach(function(id, i){
+      $(id).classList.toggle("on", i === step);
+    });
+    for (var i = 0; i < bar.length; i++) bar[i].classList.toggle("on", i <= step);
+    window.scrollTo({top:0, behavior:"smooth"});
+  }
+
+  /* ---------- 选项渲染 ---------- */
+  function renderItems(host, items, arr, prefix, withCheck){
+    var html = "";
+    for (var i = 0; i < items.length; i++){
+      html += '<div class="rowq" data-i="' + i + '">'
+            +   '<div class="qtitle"><span class="qidx">' + (i+1) + '.</span>' + items[i] + '</div>'
+            +   '<div class="grid5">';
+      for (var k = 0; k < LIKERT.length; k++){
+        html += '<label class="cell"><input type="radio" name="' + prefix + i + '" value="' + (k+1) + '">'
+              + '<span>' + LIKERT[k] + '</span></label>';
+      }
+      html += '</div></div>';
+      if (withCheck && i === CHECK_AT){
+        html += '<div class="rowq" data-check="1">'
+              +   '<div class="qtitle"><span class="qidx">质检</span>' + CHECK_TEXT + '</div>'
+              +   '<div class="grid5">';
+        for (var m = 0; m < LIKERT.length; m++){
+          html += '<label class="cell"><input type="radio" name="chk" value="' + (m+1) + '">'
+                + '<span>' + LIKERT[m] + '</span></label>';
+        }
+        html += '</div></div>';
+      }
+    }
+    host.innerHTML = html;
+
+    host.addEventListener("change", function(e){
+      var t = e.target;
+      if (t.type !== "radio") return;
+      var row = t.closest(".rowq");
+      row.querySelectorAll(".cell").forEach(function(o){ o.classList.remove("sel"); });
+      t.parentNode.classList.add("sel");
+      var i = parseInt(row.getAttribute("data-i"), 10);
+      var v = parseInt(t.value, 10);
+      if (row.getAttribute("data-check")) state.check = v;
+      else if (prefix === "a") state.ansA[i] = v;
+      else state.ansB[i] = v;
+    });
+  }
+
+  /* ---------- 基本信息 ---------- */
+  document.querySelectorAll("#s1 .chips").forEach(function(group){
+    group.addEventListener("click", function(e){
+      var chip = e.target.closest(".chip");
+      if (!chip) return;
+      group.querySelectorAll(".chip").forEach(function(c){ c.classList.remove("on"); });
+      chip.classList.add("on");
+      state[group.parentNode.getAttribute("data-f")] = chip.getAttribute("data-v");
+    });
+  });
+
+  /* ---------- 流程 ---------- */
+  $("btnStart").onclick = function(){ state.t0 = Date.now(); show(1); };
+  $("back1").onclick = function(){ show(0); };
+  $("next1").onclick = function(){
+    if (!state.gender || !state.grade || !state.hours){ $("err1").classList.add("on"); return; }
+    $("err1").classList.remove("on"); show(2);
+  };
+  $("back2").onclick = function(){ show(1); };
+  $("next2").onclick = function(){
+    if (state.ansA.indexOf(0) !== -1){ $("err2").classList.add("on"); return; }
+    $("err2").classList.remove("on"); show(3);
+  };
+  $("back3").onclick = function(){ show(2); };
+
+  $("submit").onclick = function(){
+    if (state.ansB.indexOf(0) !== -1 || !state.check){
+      $("err3").classList.add("on"); return;
+    }
+    $("err3").classList.remove("on");
+    var sum = function(a){ return a.reduce(function(x,y){ return x+y; }, 0); };
+    var a = sum(state.ansA), b = sum(state.ansB);
+    var dur = Math.round((Date.now() - state.t0) / 1000);
+    var rec = {
+      gender: state.gender, grade: state.grade, hours: state.hours,
+      a_score: a, b_score: b, check_ok: state.check === 4,
+      dur_s: dur, ansA: state.ansA.join(""), ansB: state.ansB.join(""),
+      ts: new Date().toISOString()
+    };
+    paintResult(rec);
+
+    // 有后端就上报，没有就退化为本地保存（双击打开文件也能用）
+    fetch("/api/submit", {
+      method: "POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify(rec)
+    }).then(function(r){ return r.ok ? r.json() : Promise.reject(); })
+      .then(function(j){ if (j && typeof j.count === "number") setCount(j.count, true); })
+      .catch(function(){
+        try {
+          var all = JSON.parse(localStorage.getItem("scale_records_v1") || "[]");
+          all.push(rec);
+          localStorage.setItem("scale_records_v1", JSON.stringify(all));
+          setCount(all.length, false);
+        } catch (e) { setCount(1, false); }
+      });
+
+    show(4);
+  };
+
+  function paintResult(rec){
+    var lvlA = rec.a_score >= 22 ? "偏高" : (rec.a_score >= 15 ? "中等" : "偏低");
+    var lvlB = rec.b_score >= 22 ? "较好" : (rec.b_score >= 15 ? "一般" : "偏弱");
+    $("scoreA").innerHTML = rec.a_score + '<small> / 30</small>';
+    $("scoreB").innerHTML = rec.b_score + '<small> / 30</small>';
+    $("barA").style.width = (rec.a_score / 30 * 100) + "%";
+    $("barB").style.width = (rec.b_score / 30 * 100) + "%";
+    $("lvlA").innerHTML = '水平：<span class="tag">' + lvlA + '</span>';
+    $("lvlB").innerHTML = '水平：<span class="tag">' + lvlB + '</span>';
+    $("resLine").textContent = "本次作答用时 " + rec.dur_s + " 秒";
+    var txt = "在本次课程样本中，短视频使用强度" + lvlA + "、专注力自评" + lvlB + "的同学是比较典型的一组。";
+    if (rec.a_score >= 22 && rec.b_score < 15){
+      txt += "使用强度偏高而专注力自评偏低，这两者在我们前期的课程调研中呈负相关——这正是本次研究关心的现象。";
+    } else if (rec.a_score < 15 && rec.b_score >= 22){
+      txt += "使用较克制、专注力自评也较好，这与「使用时长越长、专注力越弱」的总体趋势相反，属于值得单独讨论的个案。";
+    } else {
+      txt += "你的两项得分都处在中间区间，说明使用习惯与专注体验之间还没有出现明显的相互影响。";
+    }
+    $("interp").textContent = txt + "（本结果基于自编量表，仅供课程研究参考，不构成任何诊断。）";
+  }
+
+  function setCount(n, backend){
+    $("cnt").textContent = n;
+    $("adminBox").classList.add("on");
+    $("srvTools").style.display = backend ? "inline" : "none";
+    $("localTools").style.display = backend ? "none" : "inline";
+  }
+
+  /* 纯前端部署（如 GitHub Pages）时，数据只在本机，可自行导出 CSV */
+  $("dlLocal").onclick = function(e){
+    e.preventDefault();
+    var all = [];
+    try { all = JSON.parse(localStorage.getItem("scale_records_v1") || "[]"); } catch (err) {}
+    if (!all.length) { alert("本机还没有已提交的记录。"); return; }
+    var head = ["提交时间","性别","年级","日均时长","使用强度分","专注力分","注意力题","用时秒","A组作答","B组作答"];
+    var rows = all.map(function(r){
+      return [r.ts, r.gender, r.grade, r.hours, r.a_score, r.b_score,
+              r.check_ok ? "是" : "否", r.dur_s, r.ansA, r.ansB].join(",");
+    });
+    var NL = String.fromCharCode(10);
+    var csv = String.fromCharCode(0xFEFF) + head.join(",") + NL + rows.join(NL);
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([csv], {type:"text/csv;charset=utf-8"}));
+    a.download = "scale-responses-local.csv";
+    a.click();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); }, 3000);
+  };
+
+  $("again").onclick = function(){
+    state.gender = ""; state.grade = ""; state.hours = "";
+    state.ansA = [0,0,0,0,0,0]; state.ansB = [0,0,0,0,0,0]; state.check = 0; state.t0 = 0;
+    document.querySelectorAll("#s1 .chip").forEach(function(c){ c.classList.remove("on"); });
+    document.querySelectorAll("input[type=radio]").forEach(function(r){ r.checked = false; });
+    document.querySelectorAll(".cell").forEach(function(o){ o.classList.remove("sel"); });
+    show(0);
+  };
+
+  $("share").onclick = function(){
+    var url = location.href.split("?")[0];
+    var done = function(){ $("share").textContent = "已复制"; setTimeout(function(){ $("share").textContent = "复制本页链接"; }, 1600); };
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(url).then(done, function(){ window.prompt("复制下面的链接：", url); });
+    } else { window.prompt("复制下面的链接：", url); }
+  };
+
+  /* 首次进入：若已有数据则显示研究者入口 */
+  fetch("/api/stats").then(function(r){ return r.ok ? r.json() : Promise.reject(); })
+    .then(function(j){ if (j && typeof j.count === "number") setCount(j.count, true); })
+    .catch(function(){
+      try {
+        var all = JSON.parse(localStorage.getItem("scale_records_v1") || "[]");
+        if (all.length) setCount(all.length);
+      } catch (e) {}
+    });
+
+  renderItems($("qsA"), A_ITEMS, state.ansA, "a", false);
+  renderItems($("qsB"), B_ITEMS, state.ansB, "b", true);
+  show(0);
+})();
+</script>
+</body>
+</html>

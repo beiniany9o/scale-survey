@@ -206,16 +206,16 @@
       <button class="btn" id="share">复制本页链接</button>
     </div>
     <div class="admin" id="adminBox">
-      <span class="kbd">研究者入口</span> 已收集 <b id="cnt">0</b> 份<span id="srvTools"> ·
+      <span class="kbd" id="adminLabel">研究者入口</span> 已收集 <b id="cnt">0</b> 份<span id="srvTools"> ·
       <a href="/api/export.csv">导出 CSV</a> ·
       <a href="/api/stats" target="_blank">查看统计</a></span><span id="localTools" style="display:none"> ·
-      <a href="#" id="dlLocal">导出本机数据</a></span>
+      <a href="#" id="dlLocal">导出 CSV</a></span>
     </div>
   </section>
 
   <footer>
     课程研究 · 匿名填写 · 数据仅用于课堂报告<br>
-    研究者：刘浩（陕西理工大学 应用心理学）· <span id="ver">v1.0</span>
+    研究者：刘浩（陕西理工大学 应用心理学）· <span id="ver">v1.1</span>
   </footer>
 </div>
 
@@ -388,6 +388,7 @@
   function setCount(n, backend){
     $("cnt").textContent = n;
     $("adminBox").classList.add("on");
+    $("adminLabel").textContent = backend ? "研究者入口" : "本机记录";
     $("srvTools").style.display = backend ? "inline" : "none";
     $("localTools").style.display = backend ? "none" : "inline";
   }

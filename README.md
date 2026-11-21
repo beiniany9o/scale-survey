@@ -1,1 +1,1 @@
-#规模调查
+#scale-survey
